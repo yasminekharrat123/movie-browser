@@ -1,19 +1,33 @@
-import { useCallback, useEffect, useRef, useState } from "react";
-import { tmdbService } from "@/api/tmdb";
-import type { Movie, MovieDetail } from "@/types/movie";
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { tmdbService } from '@/api/tmdb';
+import type { Movie, MovieDetail } from '@/types/movie';
 
 export function useMovies() {
   const [movies, setMovies] = useState<Movie[]>([]);
   const [selectedMovie, setSelectedMovie] = useState<MovieDetail | null>(null);
-  const [query, setQuery] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [query, setQuery] = useState('');
   const [error, setError] = useState<string | null>(null);
-  const [debouncedQuery, setDebouncedQuery] = useState("");
-  
+  const [debouncedQuery, setDebouncedQuery] = useState('');
+
+  const [loadingList, setLoadingList] = useState(false);
+  const [loadingDetail, setLoadingDetail] = useState(false);
+
   const movieDetailsCache = useRef<Map<number, MovieDetail>>(new Map());
-  
   const abortControllerRef = useRef<AbortController | null>(null);
 
+  const MAX_CACHE_SIZE = 100;
+
+  function setCacheItem<T>(cache: Map<number, T>, key: number, value: T) {
+    if (cache.has(key)) {
+      // Update position to mark as recently used
+      cache.delete(key);
+    } else if (cache.size >= MAX_CACHE_SIZE) {
+      // Evict least recently used
+      const firstKey = cache.keys().next().value;
+      firstKey && cache.delete(firstKey);
+    }
+    cache.set(key, value);
+  }
   useEffect(() => {
     const timer = setTimeout(() => {
       setDebouncedQuery(query);
@@ -30,32 +44,32 @@ export function useMovies() {
       const controller = new AbortController();
       abortControllerRef.current = controller;
 
-      setLoading(true);
+      setLoadingList(true);
+
       setError(null);
 
       try {
         let res;
         if (debouncedQuery.trim().length > 0) {
           res = await tmdbService.searchMovies(debouncedQuery);
-          console.log("Search results:", res);
         } else {
           res = await tmdbService.getPopularMovies();
-          console.log("Popular movies:", res);
         }
         if (!controller.signal.aborted) {
           setMovies(res.results || []);
+          selectMovie(res.results[0]?.id);
         }
       } catch (err) {
         if (!controller.signal.aborted) {
-          console.error("TMDB API error:", err);
+          console.error('TMDB API error:', err);
           if (err instanceof Error && err.name === 'AbortError') {
             return;
           }
-          setError("Failed to fetch movies. Please try again.");
+          setError('Failed to fetch movies. Please try again.');
         }
       } finally {
         if (!controller.signal.aborted) {
-          setLoading(false);
+          setLoadingList(false);
         }
       }
     };
@@ -72,40 +86,28 @@ export function useMovies() {
   const selectMovie = useCallback(async (id: number) => {
     const cachedMovie = movieDetailsCache.current.get(id);
     if (cachedMovie) {
-      console.log("Using cached movie details:", cachedMovie);
+      setCacheItem(movieDetailsCache.current, id, cachedMovie);
+
       setSelectedMovie(cachedMovie);
       setError(null);
       return;
     }
 
     setError(null);
-    setLoading(true);
+    setLoadingDetail(true);
 
     try {
       const detail = await tmdbService.getMovieDetails(id);
-      console.log("Fetched movie details:", detail);
-      
-      movieDetailsCache.current.set(id, detail);
+
+      setCacheItem(movieDetailsCache.current, id, detail);
+
       setSelectedMovie(detail);
     } catch (err) {
-      console.error("Failed to fetch movie details:", err);
-      setError("Failed to fetch movie details. Please try again.");
+      console.error('Failed to fetch movie details:', err);
+      setError('Failed to fetch movie details. Please try again.');
     } finally {
-      setLoading(false);
+      setLoadingDetail(false);
     }
-  }, []);
-
-
-  
-  // Memoized function to clear errors
-  const clearError = useCallback(() => {
-    setError(null);
-  }, []);
-
-  // Memoized function to clear cache (useful for debugging or memory management)
-  const clearCache = useCallback(() => {
-    movieDetailsCache.current.clear();
-    console.log("Movie details cache cleared");
   }, []);
 
   return {
@@ -113,10 +115,9 @@ export function useMovies() {
     selectedMovie,
     query,
     setQuery,
-    loading,
+    loadingList,
+    loadingDetail,
     error,
     selectMovie,
-    clearError,
-    clearCache,
   };
 }
