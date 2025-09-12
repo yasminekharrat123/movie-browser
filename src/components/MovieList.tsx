@@ -7,9 +7,9 @@ import {
   ListItemText,
   Skeleton,
   Alert,
-} from "@mui/material";
-import type { Movie } from "@/types/movie";
-import { ScrollBox } from "@/components/ui/ScrollBar";
+} from '@mui/material';
+import type { Movie } from '@/types/movie';
+import { ScrollBar } from '@/components/ui/ScrollBar';
 
 interface Props {
   movies: Movie[];
@@ -20,7 +20,7 @@ interface Props {
 
 export function MovieList({ movies, onSelect, loading, error }: Props) {
   return (
-    <ScrollBox px={2} pb={2}>
+    <ScrollBar px={2} pb={2}>
       {loading && (
         <List disablePadding>
           {Array.from({ length: 5 }).map((_, i) => (
@@ -30,8 +30,7 @@ export function MovieList({ movies, onSelect, loading, error }: Props) {
                   variant="rectangular"
                   width={50}
                   height={75}
-                  sx={{ borderRadius: 1, mr: 2, opacity: 0.8}}
-                  
+                  sx={{ borderRadius: 1, mr: 2, opacity: 0.8 }}
                 />
                 <Box flex={1}>
                   <Skeleton variant="text" width="80%" height={24} />
@@ -45,7 +44,7 @@ export function MovieList({ movies, onSelect, loading, error }: Props) {
 
       {!loading && error && (
         <Alert severity="error" sx={{ mb: 2 }}>
-          {typeof error === "string" ? error : "Something went wrong"}
+          {typeof error === 'string' ? error : 'Something went wrong'}
         </Alert>
       )}
 
@@ -65,7 +64,7 @@ export function MovieList({ movies, onSelect, loading, error }: Props) {
                   src={
                     movie.poster_path
                       ? `https://image.tmdb.org/t/p/w92${movie.poster_path}`
-                      : "/placeholder.png"
+                      : '/No-Image-Placeholder.png'
                   }
                   alt={movie.title}
                   sx={{
@@ -92,6 +91,6 @@ export function MovieList({ movies, onSelect, loading, error }: Props) {
           ))}
         </List>
       )}
-    </ScrollBox>
+    </ScrollBar>
   );
 }
