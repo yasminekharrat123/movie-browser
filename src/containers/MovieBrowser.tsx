@@ -22,51 +22,51 @@ export function MovieBrowser() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-      <WavyBackground className="w-full h-full flex flex-col lg:flex-row">
-        {/* Mobile Header */}
-        <div className=" font-sans lg:hidden flex items-center justify-between p-4 backdrop-blur-md">
-          <button className="text-gray-700 font-bold" onClick={() => setSidebarOpen(!sidebarOpen)}>
-            {!sidebarOpen && 'Menu'}
-          </button>
-          <h1 className="text-lg font-semibold ">Movies</h1>
-        </div>
+    <WavyBackground className="flex size-full flex-col lg:flex-row">
+      {/* Mobile Header */}
+      <div className=" flex items-center justify-between p-4 font-sans backdrop-blur-md lg:hidden">
+        <button className="font-bold text-gray-700" onClick={() => setSidebarOpen(!sidebarOpen)}>
+          {!sidebarOpen && 'Menu'}
+        </button>
+        <h1 className="text-lg font-semibold ">Movies</h1>
+      </div>
 
-        {/* Sidebar */}
-        <div
-          className={`
-          fixed lg:relative top-0 left-0 h-full lg:h-auto 
-          w-3/4 lg:w-1/5
-          p-4 flex flex-col
-          transform transition-transform duration-300
-          ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0
-          z-50
+      {/* Sidebar */}
+      <div
+        className={`
+          fixed left-0 top-0 flex h-full w-3/4 
+          flex-col p-4
+          transition-transform duration-300 lg:relative
+          lg:h-auto lg:w-1/5
+          ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} z-50
+          lg:translate-x-0
           ${sidebarOpen ? 'bg-gray-900 text-white' : ''}
         `}
-        >
-          <SearchBar query={query} onChange={setQuery} />
-          <MovieList
-            movies={movies}
-            onSelect={selectMovie}
-            loading={loadingList}
-            error={listError}
-            fetchNextPage={fetchNextPage}
-            hasNextPage={hasNextPage}
-            isFetchingNextPage={isFetchingNextPage}
-          />
-        </div>
+      >
+        <SearchBar query={query} onChange={setQuery} />
+        <MovieList
+          movies={movies}
+          onSelect={selectMovie}
+          loading={loadingList}
+          error={listError}
+          fetchNextPage={fetchNextPage}
+          hasNextPage={hasNextPage}
+          isFetchingNextPage={isFetchingNextPage}
+        />
+      </div>
 
-        {/* Overlay for mobile when sidebar is open */}
-        {sidebarOpen && (
-          <div
-            className="fixed inset-0 z-40 lg:hidden bg-black/50"
-            onClick={() => setSidebarOpen(false)}
-          />
-        )}
+      {/* Overlay for mobile when sidebar is open */}
+      {sidebarOpen && (
+        <div
+          className="fixed inset-0 z-40 bg-black/50 lg:hidden"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
 
-        {/* Main Content */}
-        <div className="flex-1 h-full p-4 lg:p-6 overflow-auto ml-0 lg:ml-0">
-          <MovieDetailView movie={selectedMovie} loading={loadingDetail} />
-        </div>
-      </WavyBackground>
+      {/* Main Content */}
+      <div className="ml-0 h-full flex-1 overflow-auto p-4 lg:ml-0 lg:p-6">
+        <MovieDetailView movie={selectedMovie} loading={loadingDetail} />
+      </div>
+    </WavyBackground>
   );
 }

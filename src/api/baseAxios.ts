@@ -1,16 +1,16 @@
 import axios from 'axios';
-import type { AxiosInstance, AxiosRequestConfig, AxiosError } from 'axios';
+import type { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 
 export interface APIError {
   status?: number;
   message: string;
-  data?: any;
+  data?: unknown;
 }
 
 export class BaseAxiosService {
   protected client: AxiosInstance;
 
-  constructor(baseURL: string, defaultParams?: Record<string, any>) {
+  constructor(baseURL: string, defaultParams?: Record<string, unknown>) {
     this.client = axios.create({
       baseURL,
       params: defaultParams,
@@ -25,21 +25,25 @@ export class BaseAxiosService {
     try {
       const response = await this.client.get<T>(url, config);
       return response.data;
-    } catch (err: any) {
+    } catch (err: unknown) {
       throw this.formatError(err);
     }
   }
 
-  protected async post<T>(url: string, data?: any, config?: AxiosRequestConfig): Promise<T> {
+  protected async post<T>(
+    url: string,
+    data?: AxiosRequestConfig['data'],
+    config?: AxiosRequestConfig,
+  ): Promise<T> {
     try {
-      const response = await this.client.post<T>(url, data, config);
+      const response: AxiosResponse<T> = await this.client.post<T>(url, data, config);
       return response.data;
-    } catch (err: any) {
+    } catch (err: unknown) {
       throw this.formatError(err);
     }
   }
 
-  private formatError(error: AxiosError): APIError {
+  private formatError(error: unknown): APIError {
     if (axios.isAxiosError(error)) {
       return {
         status: error.response?.status,

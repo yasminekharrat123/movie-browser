@@ -25,7 +25,9 @@ export function useMovies() {
       cache.delete(key);
     } else if (cache.size >= MAX_CACHE_SIZE) {
       const firstKey = cache.keys().next().value;
-      firstKey && cache.delete(firstKey);
+      if (firstKey) {
+        cache.delete(firstKey);
+      }
     }
     cache.set(key, value);
   }
@@ -42,7 +44,13 @@ export function useMovies() {
     isError: isListError,
     error: listErrorObj,
     refetch: refetchList,
-  } = useInfiniteQuery<MovieResponse, Error, InfiniteData<MovieResponse>, [string, string?], number>({
+  } = useInfiniteQuery<
+    MovieResponse,
+    Error,
+    InfiniteData<MovieResponse>,
+    [string, string?],
+    number
+  >({
     queryKey: ['movies', debouncedQuery],
     queryFn: async ({ pageParam = 1 }) => {
       if (debouncedQuery.trim().length > 0) {
@@ -98,7 +106,6 @@ export function useMovies() {
       setLoadingDetail(false);
     }
   }, []);
-
 
   const listError = isListError
     ? ((listErrorObj as Error)?.message ?? 'Failed to fetch movies')

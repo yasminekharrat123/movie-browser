@@ -1,27 +1,27 @@
-import "@testing-library/jest-dom";
-import { render, screen, fireEvent } from "@testing-library/react";
-import { MovieList } from "../MovieList";
-import type { Movie } from "@/types/movie";
+import '@testing-library/jest-dom';
+import { render, screen, fireEvent } from '@testing-library/react';
+import { MovieList } from '../MovieList';
+import type { Movie } from '@/types/movie';
 
 const sampleMovies: Movie[] = [
   {
     id: 1,
-    title: "Movie One",
-    release_date: "2024-01-01",
-    poster_path: "/test1.jpg",
-    overview: "",
+    title: 'Movie One',
+    release_date: '2024-01-01',
+    poster_path: '/test1.jpg',
+    overview: '',
   },
   {
     id: 2,
-    title: "Movie Two",
-    release_date: "2024-02-01",
+    title: 'Movie Two',
+    release_date: '2024-02-01',
     poster_path: null,
-    overview: "",
+    overview: '',
   },
 ];
 
-describe("MovieList", () => {
-  it("renders skeletons while loading", () => {
+describe('MovieList', () => {
+  it('renders skeletons while loading', () => {
     render(
       <MovieList
         movies={[]}
@@ -29,13 +29,13 @@ describe("MovieList", () => {
         loading={true}
         error={null}
         fetchNextPage={jest.fn()}
-      />
+      />,
     );
 
-    expect(screen.getAllByTestId("skeleton")).toHaveLength(5);
+    expect(screen.getAllByTestId('skeleton')).toHaveLength(5);
   });
 
-  it("shows error message when error is provided", () => {
+  it('shows error message when error is provided', () => {
     render(
       <MovieList
         movies={[]}
@@ -43,13 +43,13 @@ describe("MovieList", () => {
         loading={false}
         error="Something went wrong"
         fetchNextPage={jest.fn()}
-      />
+      />,
     );
 
     expect(screen.getByText(/Something went wrong/i)).toBeInTheDocument();
   });
 
-  it("shows empty state when no movies", () => {
+  it('shows empty state when no movies', () => {
     render(
       <MovieList
         movies={[]}
@@ -57,13 +57,13 @@ describe("MovieList", () => {
         loading={false}
         error={null}
         fetchNextPage={jest.fn()}
-      />
+      />,
     );
 
     expect(screen.getByText(/No movies found/i)).toBeInTheDocument();
   });
 
-  it("renders movies with title and release date", () => {
+  it('renders movies with title and release date', () => {
     render(
       <MovieList
         movies={sampleMovies}
@@ -71,15 +71,15 @@ describe("MovieList", () => {
         loading={false}
         error={null}
         fetchNextPage={jest.fn()}
-      />
+      />,
     );
 
-    expect(screen.getByText("Movie One")).toBeInTheDocument();
-    expect(screen.getByText("2024-01-01")).toBeInTheDocument();
-    expect(screen.getByText("Movie Two")).toBeInTheDocument();
+    expect(screen.getByText('Movie One')).toBeInTheDocument();
+    expect(screen.getByText('2024-01-01')).toBeInTheDocument();
+    expect(screen.getByText('Movie Two')).toBeInTheDocument();
   });
 
-  it("calls onSelect when a movie is clicked", () => {
+  it('calls onSelect when a movie is clicked', () => {
     const onSelect = jest.fn();
 
     render(
@@ -89,10 +89,10 @@ describe("MovieList", () => {
         loading={false}
         error={null}
         fetchNextPage={jest.fn()}
-      />
+      />,
     );
 
-    fireEvent.click(screen.getByText("Movie One"));
+    fireEvent.click(screen.getByText('Movie One'));
     expect(onSelect).toHaveBeenCalledWith(1);
   });
 });

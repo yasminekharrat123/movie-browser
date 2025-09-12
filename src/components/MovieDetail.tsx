@@ -15,33 +15,33 @@ export function MovieDetailView({ movie, loading }: Props) {
 
   if (!movie) {
     return (
-      <div className="flex items-center justify-center h-full font-extrabold">
+      <div className="flex h-full items-center justify-center font-extrabold">
         <span>Select a movie to see details</span>
       </div>
     );
   }
   return (
-    <div className="p-6 grid grid-cols-1 lg:grid-cols-2 gap-8 items-start font-sans">
-      <div className="flex flex-col h-full">
+    <div className="grid grid-cols-1 items-start gap-8 p-6 font-sans lg:grid-cols-2">
+      <div className="flex h-full flex-col">
         {/* Title + Release Date */}
         <div className="mb-6">
           {movie.title && (
-            <h2 className="text-3xl font-extrabold mb-2 text-center lg:text-left">{movie.title}</h2>
+            <h2 className="mb-2 text-center text-3xl font-extrabold lg:text-left">{movie.title}</h2>
           )}
           {movie.release_date && (
-            <p className="text-sm text-gray-400 font-semibold text-center lg:text-left">
+            <p className="text-center text-sm font-semibold text-gray-400 lg:text-left">
               <span className="font-extrabold">Release Date:</span> {formatDate(movie.release_date)}
             </p>
           )}
           {movie.tagline?.trim() && (
-            <p className="italic text-gray-500 font-semibold mt-2 text-center lg:text-left">
-              "{movie.tagline}"
+            <p className="mt-2 text-center font-semibold italic text-gray-500 lg:text-left">
+              &quot;{movie.tagline}&quot;
             </p>
           )}
         </div>
 
         {/* Poster (moves under title on small screens, right column on lg+) */}
-        <div className="flex justify-center mb-6 lg:hidden">
+        <div className="mb-6 flex justify-center lg:hidden">
           <FloatingCard>
             <img
               src={
@@ -50,18 +50,18 @@ export function MovieDetailView({ movie, loading }: Props) {
                   : '/No-Image-Placeholder.png'
               }
               alt={movie.poster_path ? movie.title : 'No poster available'}
-              className="w-full h-auto object-cover rounded-2xl"
+              className="h-auto w-full rounded-2xl object-cover"
             />
           </FloatingCard>
         </div>
 
         {/* Details */}
-        <div className="space-y-4 text-sm mt-auto">
+        <div className="mt-auto space-y-4 text-sm">
           {movie.overview?.trim() && (
-            <p className="text-gray-300 leading-relaxed font-semibold">{movie.overview}</p>
+            <p className="font-semibold leading-relaxed text-gray-300">{movie.overview}</p>
           )}
 
-          <div className="space-y-1 text-gray-300 font-semibold">
+          <div className="space-y-1 font-semibold text-gray-300">
             {movie.runtime ? (
               <p>
                 <span className="font-extrabold">Runtime:</span> {movie.runtime} min
@@ -143,7 +143,7 @@ export function MovieDetailView({ movie, loading }: Props) {
           {movie.credits?.cast?.some((actor) => actor.name?.trim() && actor.character?.trim()) && (
             <div>
               <p className="font-extrabold text-gray-200">Top Cast:</p>
-              <ul className="list-disc list-inside font-semibold">
+              <ul className="list-inside list-disc font-semibold">
                 {movie.credits.cast
                   .filter((actor) => actor.name?.trim() && actor.character?.trim())
                   .slice(0, 5)
@@ -159,7 +159,7 @@ export function MovieDetailView({ movie, loading }: Props) {
           {/* Trailer */}
           {hasItems(movie.videos?.results) && (
             <div>
-              <p className="font-extrabold text-gray-200 mb-2">Trailer:</p>
+              <p className="mb-2 font-extrabold text-gray-200">Trailer:</p>
               {movie.videos.results
                 .filter((v) => v.type === 'Trailer' && v.site === 'YouTube' && v.key)
                 .slice(0, 1)
@@ -180,7 +180,7 @@ export function MovieDetailView({ movie, loading }: Props) {
       </div>
 
       {/* Right Side: Poster (only visible on lg+) */}
-      <div className="hidden lg:flex justify-end">
+      <div className="hidden justify-end lg:flex">
         <FloatingCard>
           <img
             src={
@@ -189,7 +189,7 @@ export function MovieDetailView({ movie, loading }: Props) {
                 : '/No-Image-Placeholder.png'
             }
             alt={movie.poster_path ? movie.title : 'No poster available'}
-            className="w-full h-auto object-cover rounded-2xl"
+            className="h-auto w-full rounded-2xl object-cover"
           />
         </FloatingCard>
       </div>

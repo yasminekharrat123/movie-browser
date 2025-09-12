@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { cn } from '@/lib/utils';
 import { useEffect, useRef, useState } from 'react';
 import { createNoise3D } from 'simplex-noise';
@@ -60,8 +61,8 @@ export const WavyBackground = ({
       ctx.lineWidth = waveWidth || 50;
       ctx.strokeStyle = waveColors[i % waveColors.length];
       for (x = 0; x < w; x += 5) {
-        var y = noise(x / 800, 0.3 * i, nt) * 100;
-        ctx.lineTo(x, y + h * 0.5); 
+        const y = noise(x / 800, 0.3 * i, nt) * 100;
+        ctx.lineTo(x, y + h * 0.5);
       }
       ctx.stroke();
       ctx.closePath();
@@ -82,7 +83,7 @@ export const WavyBackground = ({
     return () => {
       cancelAnimationFrame(animationId);
     };
-  }, []);
+  });
 
   const [isSafari, setIsSafari] = useState(false);
   useEffect(() => {
@@ -95,12 +96,12 @@ export const WavyBackground = ({
 
   return (
     <>
-      <div className=" flex flex-col items-center h-screen w-screen overflow-hidden">
+      <div className=" flex h-screen w-screen flex-col items-center overflow-hidden">
         <div className={cn('absolute right-0 z-10 bg-transparent', className)} {...props}>
           {children}
         </div>
         <canvas
-          className="absolute -z-10 pointer-events-none"
+          className="pointer-events-none absolute -z-10"
           ref={canvasRef}
           id="canvas"
           style={{

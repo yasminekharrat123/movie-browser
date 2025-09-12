@@ -8,7 +8,7 @@ interface Props {
 export function SearchBar({ query, onChange }: Props) {
   return (
     <Box sx={{ p: 2 }}>
-      <h6 className="text-3xl font-bold mb-2 font-sans">Movies</h6>
+      <h6 className="mb-2 font-sans text-3xl font-bold">Movies</h6>
       <TextField
         placeholder="Search movies..."
         fullWidth
