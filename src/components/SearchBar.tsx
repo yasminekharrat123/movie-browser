@@ -1,5 +1,4 @@
-import { Box, TextField } from "@mui/material";
-import Typography from "@mui/material/Typography";
+import { Box, TextField } from '@mui/material';
 
 interface Props {
   query: string;
@@ -9,9 +8,7 @@ interface Props {
 export function SearchBar({ query, onChange }: Props) {
   return (
     <Box sx={{ p: 2 }}>
-      <Typography variant="h6" gutterBottom>
-        Movies
-      </Typography>
+      <h6 className="text-3xl font-bold mb-2 font-sans">Movies</h6>
       <TextField
         placeholder="Search movies..."
         fullWidth
