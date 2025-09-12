@@ -7,8 +7,19 @@ import { WavyBackground } from '@/components/ui/WavyBackground';
 import { ScrollBar } from '@/components/ui/ScrollBar';
 
 export function MovieBrowser() {
-  const { movies, selectedMovie, query, setQuery, loadingList, loadingDetail, error, selectMovie } =
-    useMovies();
+  const {
+    movies,
+    selectedMovie,
+    query,
+    setQuery,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    loadingList,
+    loadingDetail,
+    listError,
+    selectMovie,
+  } = useMovies();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
@@ -35,7 +46,15 @@ export function MovieBrowser() {
         `}
         >
           <SearchBar query={query} onChange={setQuery} />
-          <MovieList movies={movies} onSelect={selectMovie} loading={loadingList} error={error} />
+          <MovieList
+            movies={movies}
+            onSelect={selectMovie}
+            loading={loadingList}
+            error={listError}
+            fetchNextPage={fetchNextPage}
+            hasNextPage={hasNextPage}
+            isFetchingNextPage={isFetchingNextPage}
+          />
         </div>
 
         {/* Overlay for mobile when sidebar is open */}

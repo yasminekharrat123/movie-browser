@@ -4,20 +4,20 @@ import type { MovieDetail, MovieResponse } from '@/types/movie';
 const BASE_URL = 'https://api.themoviedb.org/3';
 const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
 
-console.log(import.meta.env.VITE_TMDB_API_KEY);
-
 class TMDBService extends BaseAxiosService {
   constructor() {
     super(BASE_URL, { api_key: API_KEY });
   }
 
-  getPopularMovies(): Promise<MovieResponse> {
-    return this.get<MovieResponse>('/movie/popular');
+  getPopularMovies(page = 1): Promise<MovieResponse> {
+    return this.get<MovieResponse>('/movie/popular', {
+      params: { page },
+    });
   }
 
-  searchMovies(query: string): Promise<MovieResponse> {
+  searchMovies(query: string, page = 1): Promise<MovieResponse> {
     return this.get<MovieResponse>('/search/movie', {
-      params: { query },
+      params: { query, page },
     });
   }
 
