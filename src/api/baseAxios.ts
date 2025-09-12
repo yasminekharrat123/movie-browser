@@ -1,5 +1,5 @@
-import axios from "axios";
-import type { AxiosInstance, AxiosRequestConfig, AxiosError } from "axios";
+import axios from 'axios';
+import type { AxiosInstance, AxiosRequestConfig, AxiosError } from 'axios';
 
 export interface APIError {
   status?: number;
@@ -15,7 +15,7 @@ export class BaseAxiosService {
       baseURL,
       params: defaultParams,
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       timeout: 10000,
     });
@@ -43,10 +43,10 @@ export class BaseAxiosService {
     if (axios.isAxiosError(error)) {
       return {
         status: error.response?.status,
-        message:  error.message,
+        message: error.message,
         data: error.response?.data,
       };
     }
-    return { message: "Unexpected error occurred" };
+    return { message: 'Unexpected error occurred' };
   }
 }
