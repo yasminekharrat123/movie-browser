@@ -105,7 +105,6 @@ export function useMovies() {
     : null;
 
   return {
-    // list
     movies,
     query,
     setQuery,
@@ -116,7 +115,6 @@ export function useMovies() {
     listError,
     refetchList,
 
-    // detail
     selectedMovie,
     selectMovie,
     loadingDetail,

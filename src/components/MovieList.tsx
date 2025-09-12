@@ -66,6 +66,7 @@ export function MovieList({
             <ListItem key={i} disablePadding>
               <ListItemButton disabled>
                 <Skeleton
+                  data-testid="skeleton"
                   variant="rectangular"
                   width={50}
                   height={75}

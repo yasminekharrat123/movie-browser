@@ -22,7 +22,6 @@ export function MovieDetailView({ movie, loading }: Props) {
   }
   return (
     <div className="p-6 grid grid-cols-1 lg:grid-cols-2 gap-8 items-start font-sans">
-      {/* Left Side (Title, Poster, and Details on small screens) */}
       <div className="flex flex-col h-full">
         {/* Title + Release Date */}
         <div className="mb-6">

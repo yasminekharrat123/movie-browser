@@ -4,7 +4,6 @@ import { MovieList } from '@/components/MovieList';
 import { MovieDetailView } from '@/components/MovieDetail';
 import { useMovies } from '@/hooks/useMovies';
 import { WavyBackground } from '@/components/ui/WavyBackground';
-import { ScrollBar } from '@/components/ui/ScrollBar';
 
 export function MovieBrowser() {
   const {
@@ -23,7 +22,6 @@ export function MovieBrowser() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <ScrollBar>
       <WavyBackground className="w-full h-full flex flex-col lg:flex-row">
         {/* Mobile Header */}
         <div className=" font-sans lg:hidden flex items-center justify-between p-4 backdrop-blur-md">
@@ -70,6 +68,5 @@ export function MovieBrowser() {
           <MovieDetailView movie={selectedMovie} loading={loadingDetail} />
         </div>
       </WavyBackground>
-    </ScrollBar>
   );
 }
