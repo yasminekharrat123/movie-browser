@@ -13,7 +13,7 @@ Movie Browser is a single-page application that allows users to discover popular
 - **Search Functionality**: Real-time search with debounced input (300ms delay)
 - **Movie Details**: Comprehensive movie information including:
   - Cast and crew information
-  - Movie trailers and videos
+  - Movie trailers
   - Production details and metadata
   - Ratings and release information
 - **Responsive Design**: Mobile-first approach with collapsible sidebar
@@ -21,7 +21,7 @@ Movie Browser is a single-page application that allows users to discover popular
 
 ### UI/UX Features
 - **Animated Background**: Custom wavy background using Simplex noise
-- **Smooth Animations**: Framer Motion animations throughout the interface
+- **Smooth Animations**: Framer Motion animations for the movie poster
 - **Loading States**: Skeleton loaders and loading indicators
 - **Error Handling**: User-friendly error messages
 - **Infinite Scrolling**: Seamless pagination for movie lists
@@ -40,7 +40,6 @@ Movie Browser is a single-page application that allows users to discover popular
 - **UI Library**: Material-UI (MUI), Tailwind CSS
 - **State Management**: React Query (TanStack Query)
 - **HTTP Client**: Axios
-- **Animations**: Framer Motion
 - **Build Tool**: Vite
 - **Package Manager**: npm
 
@@ -134,7 +133,6 @@ The application integrates with The Movie Database (TMDB) API v3:
 - Popular movies endpoint
 - Movie search endpoint  
 - Movie details with credits and videos
-- Poster and backdrop image URLs
 
 ## License
 
