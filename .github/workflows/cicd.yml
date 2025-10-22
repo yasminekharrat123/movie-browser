@@ -100,6 +100,15 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Download image artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: docker-image
+          path: .
+
+      - name: Load Docker image
+        run: docker load -i image.tar
+
       - name: Push image
         run: |
           IMAGE_NAME=ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}
