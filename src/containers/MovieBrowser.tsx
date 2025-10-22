@@ -21,6 +21,7 @@ export function MovieBrowser() {
   } = useMovies();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
+  console.log('test monitoring with sample log from frontend stdout');
   return (
     <WavyBackground className="flex size-full flex-col lg:flex-row">
       {/* Mobile Header */}

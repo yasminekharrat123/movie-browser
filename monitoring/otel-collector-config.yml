@@ -1,0 +1,33 @@
+receivers:
+  otlp:
+    protocols:
+      http:
+        endpoint: 0.0.0.0:4318
+        cors:
+          allowed_origins:
+            - "http://localhost:3000"
+            - "http://frontend:80"
+          allowed_headers:
+            - "Content-Type"
+            - "User-Agent"
+            - "Authorization"
+            - "Accept"
+            - "Origin"
+            - "Access-Control-Allow-Origin"
+            - "Access-Control-Request-Headers"
+          max_age: 7200
+      grpc:
+exporters:
+  otlphttp/tempo:
+    endpoint: "http://tempo:4318"
+    tls:
+      insecure: true
+
+service:
+  pipelines:
+    traces:
+      receivers: [otlp]
+      exporters: [otlphttp/tempo]
+    logs:
+      receivers: [otlp]
+      exporters: [otlphttp/tempo]

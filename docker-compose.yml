@@ -1,0 +1,92 @@
+services:
+  frontend:
+    build: .
+    container_name: frontend
+    ports:
+      - "3000:80"
+    volumes:
+      - ./monitoring/frontend-logs:/var/log/nginx 
+    networks:
+      - observability
+    labels:
+      logging: "promtail"
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - "3001:3000"
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    volumes:
+      - ./monitoring/grafana-data:/var/lib/grafana
+      - ./monitoring/provisioning:/etc/grafana/provisioning
+    networks:
+      - observability
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+    networks:
+      - observability
+  loki:
+    image: grafana/loki:2.9.0
+    container_name: loki
+    command: -config.file=/etc/loki/local-config.yaml
+    ports:
+      - "3100:3100"
+    networks:
+      - observability
+  # Promtail (log collector)
+  promtail:
+    image: grafana/promtail:2.9.0
+    container_name: promtail
+    volumes:
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./monitoring/frontend-logs:/var/log/nginx:ro
+      - ./monitoring/promtail-config.yml:/etc/promtail/config.yml
+    networks:
+      - observability
+  # Tempo (traces)
+  tempo:
+    image: grafana/tempo:latest
+    container_name: tempo
+    command: [ "-config.file=/etc/tempo.yaml" ]
+    volumes:
+      - ./monitoring/tempo.yml:/etc/tempo.yaml
+    ports:
+      - "3200:3200"
+    networks:
+      - observability
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:latest
+    container_name: otel-collector
+    ports:
+      - "4318:4318"     # OTLP HTTP
+      - "55681:55681"   # OTLP gRPC
+    volumes:
+      - ./monitoring/otel-collector-config.yml:/etc/otel-collector-config.yaml
+    command: [
+      "--config", "/etc/otel-collector-config.yaml"
+    ]
+    networks:
+      - observability
+    environment:
+    - OTEL_EXPORTER_OTLP_PROTOCOL=http/protobuf
+    
+    depends_on:
+      - tempo
+  node-exporter:
+    image: prom/node-exporter:latest
+    container_name: node-exporter
+    ports:
+      - "9100:9100"
+    networks:
+      - observability
+
+networks:
+  observability:
