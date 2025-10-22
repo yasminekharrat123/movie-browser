@@ -83,7 +83,7 @@ jobs:
       - name: Upload image to next job
         uses: actions/upload-artifact@v4
         with:
-          name: image-metadata
+          name: docker-image
           path: .
           retention-days: 1
 
